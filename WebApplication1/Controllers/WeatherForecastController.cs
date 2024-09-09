@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
 using WebApplication1.Brokers;
+using WebApplication1.Models;
 
 namespace WebApplication1.Controllers
 {
@@ -23,9 +24,15 @@ namespace WebApplication1.Controllers
         }
 
         [HttpGet(Name = "GetWeatherForecast")]
-        public IEnumerable<WeatherForecast> Get()
+        public async Task< IEnumerable<WeatherForecast>> Get()
         {
+
+            Subject subject = new Subject();
+            subject.Name = "Jahongir";
+            subject.ID = Guid.NewGuid();
+            await istorageBroker.InsertSubjectAsync(subject);
             
+
             return Enumerable.Range(1, 5).Select(index => new WeatherForecast
             {
                 Date = DateOnly.FromDateTime(DateTime.Now.AddDays(index)),

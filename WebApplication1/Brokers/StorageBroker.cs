@@ -8,7 +8,7 @@ namespace WebApplication1.Brokers
 {
     public interface IStorageBroker
     {
-        
+        Task<Subject> InsertSubjectAsync(Subject subject);
     }
     public class StorageBroker : EFxceptionsContext, IStorageBroker
 
@@ -21,6 +21,18 @@ namespace WebApplication1.Brokers
 
         }
         public DbSet<Subject> subjects { get; set; }
+
+
+
+        public async Task<Subject> InsertSubjectAsync(Subject subject)
+        {
+            StorageBroker storageBroker = new StorageBroker(this.configuration);
+            await storageBroker.subjects.AddAsync(subject);
+            await storageBroker.SaveChangesAsync();
+
+            return subject;
+        }
+
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             string connectionResult = this.configuration.GetConnectionString("defoultConnection");
